@@ -55,8 +55,8 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> Delete([FromQuery] Guid Id)
 
         {
-            DeleteProductCommand deleteBrand = new() { Id = Id };
-            DeleteProductResponse response = await mediator.Send(deleteBrand);
+            DeleteProductCommand deleteProduct = new() { Id = Id };
+            DeleteProductResponse response = await mediator.Send(deleteProduct);
 
             return Ok(response);
         }
