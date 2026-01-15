@@ -4,8 +4,8 @@ using Domain.Entities;
 
 namespace Application.Services.Repositories
 {
-    public interface IProductRepository:IAsyncRepository<Product, Guid>, IRepository<Product, Guid>
+    public interface IProductRepository : IAsyncRepository<Product, Guid>, IRepository<Product, Guid>
     {
-        
+ 
     }
 }

@@ -1,6 +1,12 @@
 
 
 using Application.Features.Products.Commands.Create;
+using Application.Features.Products.Commands.Delete;
+using Application.Features.Products.Commands.Update;
+using Application.Features.Products.Queries.GetById;
+using Application.Features.Products.Queries.GetList;
+using Core.Application.Request;
+using Core.Application.Response;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
@@ -15,6 +21,42 @@ namespace WebAPI.Controllers
                 return BadRequest();
 
             CreatedProductResponse response = await mediator.Send(createProductCommand);
+
+            return Ok(response);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll([FromQuery] PageRequest pageRequest)
+        {
+            GetListProductQuery getListProductQuery = new() { PageRequest = pageRequest };
+
+            GetListResponse<GetListProductListItemDto> getListResponse = await mediator.Send(getListProductQuery);
+
+            return Ok(getListResponse);
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetById([FromQuery] Guid id)
+        {
+            GetByIdProductQuery getByIdProductQuery = new() { Id = id };
+            GetByIdProductResponse response = await mediator.Send(getByIdProductQuery);
+
+            return Ok(response);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody] UpdateProductCommand updateProductCommand)
+        {
+            UpdateProductResponse response = await mediator.Send(updateProductCommand);
+
+            return Ok(response);
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete([FromQuery] Guid Id)
+
+        {
+            DeleteProductCommand deleteBrand = new() { Id = Id };
+            DeleteProductResponse response = await mediator.Send(deleteBrand);
 
             return Ok(response);
         }
