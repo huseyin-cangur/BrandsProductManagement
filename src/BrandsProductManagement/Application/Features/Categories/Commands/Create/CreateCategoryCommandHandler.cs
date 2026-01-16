@@ -34,6 +34,8 @@ namespace Application.Features.Categories.Commands.Create
 
             CreatedCategoryResponse response = _mapper.Map<CreatedCategoryResponse>(category);
 
+            
+
             return response;
         }
     }

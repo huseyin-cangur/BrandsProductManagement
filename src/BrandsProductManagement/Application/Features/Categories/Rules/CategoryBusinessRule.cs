@@ -2,12 +2,13 @@
 
 using Application.Features.Categories.Constants;
 using Application.Services.Repositories;
+using Core.Application.Rules;
 using Core.CrossCuttingConcerns.Exceptions.Types;
 using Domain.Entities;
 
 namespace Application.Features.Categories.Rules
 {
-    public class CategoryBusinessRule
+    public class CategoryBusinessRule:BaseBusinessRules
     {
         private readonly ICategoryRepository _categoryRepository;
 

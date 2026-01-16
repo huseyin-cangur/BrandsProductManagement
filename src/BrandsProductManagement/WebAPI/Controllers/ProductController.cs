@@ -22,16 +22,27 @@ namespace WebAPI.Controllers
 
             CreatedProductResponse response = await mediator.Send(createProductCommand);
 
-            return Ok(response);
+
+            return Created(
+            string.Empty,
+            ApiResponse<CreatedProductResponse>.SuccessResponse(
+                response,
+                 "Ürün eklendi."
+                    )
+            );
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] PageRequest pageRequest)
+        public async Task<IActionResult> GetAll([FromQuery] PageRequest? pageRequest)
         {
-            GetListProductQuery getListProductQuery = new() { PageRequest = pageRequest };
 
-            GetListResponse<GetListProductListItemDto> getListResponse = await mediator.Send(getListProductQuery);
+            var query = new GetListProductQuery
+            {
+                PageRequest = pageRequest?.IsValid == true ? pageRequest : null
+            };
 
+            GetListResponse<GetListProductListItemDto> getListResponse = await mediator.Send(query);
+            
             return Ok(getListResponse);
         }
         [HttpGet]
@@ -48,7 +59,12 @@ namespace WebAPI.Controllers
         {
             UpdateProductResponse response = await mediator.Send(updateProductCommand);
 
-            return Ok(response);
+            return Ok(
+ApiResponse<UpdateProductResponse>.SuccessResponse(
+    response,
+    "Ürün başarıyla güncellendi"
+)
+);
         }
 
         [HttpDelete]
@@ -58,7 +74,11 @@ namespace WebAPI.Controllers
             DeleteProductCommand deleteProduct = new() { Id = Id };
             DeleteProductResponse response = await mediator.Send(deleteProduct);
 
-            return Ok(response);
+            return Ok(
+            ApiResponse<DeleteProductResponse>.SuccessResponse(
+                response,
+                "Ürün başarıyla silindi"
+            ));
         }
 
     }

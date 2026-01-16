@@ -13,7 +13,7 @@ namespace Application.Features.Categories.Profiles
 {
     public class CategoryMappingProfile : Profile
     {
-        protected CategoryMappingProfile()
+        public CategoryMappingProfile()
         {
             CreateMap<CreateCategoryCommand, Category>().ReverseMap();
             CreateMap<CreatedCategoryResponse, Category>().ReverseMap();

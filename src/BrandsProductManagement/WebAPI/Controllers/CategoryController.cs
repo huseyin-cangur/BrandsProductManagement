@@ -9,6 +9,7 @@ using Core.Application.Request;
 using Core.Application.Response;
 using Microsoft.AspNetCore.Mvc;
 
+
 namespace WebAPI.Controllers
 {
     public class CategoryController : BaseController
@@ -21,15 +22,27 @@ namespace WebAPI.Controllers
 
             CreatedCategoryResponse response = await mediator.Send(createCategoryCommand);
 
-            return Ok(response);
+            return Created(
+            string.Empty,
+            ApiResponse<CreatedCategoryResponse>.SuccessResponse(
+                response,
+                  "Kategori eklendi."
+                    )
+        );
+
+
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] PageRequest pageRequest)
+        public async Task<IActionResult> GetAll([FromQuery] PageRequest? pageRequest)
         {
-            GetListCategoryQuery getListCategoryQuery = new() { PageRequest = pageRequest };
+        
+            var query = new GetListCategoryQuery
+            {
+                PageRequest = pageRequest?.IsValid == true ? pageRequest : null
+            };
 
-            GetListResponse<GetListCategoryListItemDto> getListResponse = await mediator.Send(getListCategoryQuery);
+            GetListResponse<GetListCategoryListItemDto> getListResponse = await mediator.Send(query);
 
             return Ok(getListResponse);
         }
@@ -47,7 +60,12 @@ namespace WebAPI.Controllers
         {
             UpdateCategoryResponse response = await mediator.Send(updateCategoryCommand);
 
-            return Ok(response);
+            return Ok(
+       ApiResponse<UpdateCategoryResponse>.SuccessResponse(
+           response,
+           "Kategori başarıyla güncellendi"
+       )
+ );
         }
 
         [HttpDelete]
@@ -57,7 +75,12 @@ namespace WebAPI.Controllers
             DeleteCategoryCommand deleteCategory = new() { Id = Id };
             DeleteCategoryResponse response = await mediator.Send(deleteCategory);
 
-            return Ok(response);
+            return Ok(
+        ApiResponse<DeleteCategoryResponse>.SuccessResponse(
+            response,
+            "Kategori başarıyla silindi"
+        )
+  );
         }
     }
 }

@@ -21,16 +21,30 @@ namespace Application.Features.Categories.Queries.GetList
 
         public async Task<GetListResponse<GetListCategoryListItemDto>> Handle(GetListCategoryQuery request, CancellationToken cancellationToken)
         {
-            Paginate<Category> Categories = await _categoryRepository.GetListAsync(
-               index: request.PageRequest.PageIndex,
-               size: request.PageRequest.PageSize,
-               cancellationToken: cancellationToken
 
-           );
+            Paginate<Category> categories;
 
-            GetListResponse<GetListCategoryListItemDto> getListResponse = _mapper.Map<GetListResponse<GetListCategoryListItemDto>>(Categories);
 
-            return getListResponse;
+            if (request.PageRequest?.PageIndex.HasValue == true &&
+                request.PageRequest.PageSize.HasValue)
+            {
+                categories = await _categoryRepository.GetListAsync(
+                    index: request.PageRequest.PageIndex.Value,
+                    size: request.PageRequest.PageSize.Value,
+                    cancellationToken: cancellationToken
+                );
+            }
+            else
+            {
+                categories = await _categoryRepository.GetListAsync(
+                    cancellationToken: cancellationToken
+                );
+            }
+
+            return _mapper.Map<GetListResponse<GetListCategoryListItemDto>>(categories);
+
+
+
         }
     }
 }

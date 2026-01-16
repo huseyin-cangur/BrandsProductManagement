@@ -18,7 +18,7 @@ namespace Persistence.EntityConfiguration
 
             builder.HasOne(b => b.Category);
 
-            builder.HasIndex(indexExpression: b => b.Name, name: "UK_Product_Name").IsUnique();
+            // builder.HasIndex(indexExpression: b => b.Name, name: "UK_Product_Name").IsUnique();
 
 
             builder.HasQueryFilter(b => !b.DeletedDate.HasValue);

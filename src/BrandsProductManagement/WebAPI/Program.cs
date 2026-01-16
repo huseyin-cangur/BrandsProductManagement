@@ -5,7 +5,17 @@ using WebAPI.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy", policy =>
+    {
+        policy
+            .SetIsOriginAllowed(_ => true)  
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();  
+    });
+});
 
 builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddApplicationServices();
@@ -24,6 +34,11 @@ if (app.Environment.IsDevelopment())
         opt.SwaggerEndpoint("/swagger/v1/swagger.json", "BrandsProductResponse API v1");
     });
 }
+app.UseCors("CorsPolicy");
+
+app.UseAuthentication();
+app.UseAuthorization();
+
 
 app.MapControllers();
 app.ConfigureCustomExtensionMiddleware();
