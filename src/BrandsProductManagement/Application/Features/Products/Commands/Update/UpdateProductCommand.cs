@@ -1,9 +1,10 @@
 
+using Core.Application.Pipelines.Transaction;
 using MediatR;
 
 namespace Application.Features.Products.Commands.Update
 {
-    public class UpdateProductCommand : IRequest<UpdateProductResponse>
+    public class UpdateProductCommand : IRequest<UpdateProductResponse>,ITransactionRequest
     {
         public Guid Id { get; set; }
         public string? Name { get; set; }
