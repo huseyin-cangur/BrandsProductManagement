@@ -1,6 +1,6 @@
 using Application;
 using Core.CrossCuttingConcerns.Exceptions.Extensions;
-using Microsoft.Extensions.DependencyInjection;
+using Core.Security;
 using Persistence;
 using WebAPI.Extensions;
 
@@ -20,6 +20,7 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddApplicationServices();
+builder.Services.AddSecurityServices();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSwaggerConfig();
 
