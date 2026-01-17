@@ -1,5 +1,6 @@
 using Application;
 using Core.CrossCuttingConcerns.Exceptions.Extensions;
+using Microsoft.Extensions.DependencyInjection;
 using Persistence;
 using WebAPI.Extensions;
 
@@ -10,15 +11,16 @@ builder.Services.AddCors(options =>
     options.AddPolicy("CorsPolicy", policy =>
     {
         policy
-            .SetIsOriginAllowed(_ => true)  
+            .SetIsOriginAllowed(_ => true)
             .AllowAnyHeader()
             .AllowAnyMethod()
-            .AllowCredentials();  
+            .AllowCredentials();
     });
 });
 
 builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddApplicationServices();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddSwaggerConfig();
 
 builder.Services.AddDistributedMemoryCache();
