@@ -31,7 +31,7 @@ namespace Application.Features.Products.Commands.Create
 
 
             await _productRepository.AddAsync(product);
-            await _productRepository.AddAsync(product);
+           
 
             CreatedProductResponse response = _mapper.Map<CreatedProductResponse>(product);
 

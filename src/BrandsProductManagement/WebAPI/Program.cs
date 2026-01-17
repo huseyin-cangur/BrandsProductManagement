@@ -21,6 +21,8 @@ builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddApplicationServices();
 builder.Services.AddSwaggerConfig();
 
+builder.Services.AddDistributedMemoryCache();
+
 builder.Services.AddControllers();
 
 var app = builder.Build();
