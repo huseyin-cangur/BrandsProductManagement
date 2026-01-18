@@ -22,25 +22,14 @@ namespace Application.Features.Products.Queries.GetList
 
         public async Task<GetListResponse<GetListProductListItemDto>> Handle(GetListProductQuery request, CancellationToken cancellationToken)
         {
-            Paginate<Product> products;
-
-            if (request.PageRequest?.PageIndex.HasValue == true &&
-                request.PageRequest.PageSize.HasValue)
-            {
-                products = await _productRepository.GetListAsync(
+            Paginate<Product> products =
+            products = await _productRepository.GetListAsync(
                     include: p => p.Include(p => p.Category),
                     index: request.PageRequest.PageIndex.Value,
                     size: request.PageRequest.PageSize.Value,
-                    cancellationToken: cancellationToken
-                );
-            }
-            else
-            {
-                products = await _productRepository.GetListAsync(
-                    include: p => p.Include(p => p.Category),
-                    cancellationToken: cancellationToken
-                );
-            }
+                    cancellationToken: cancellationToken);
+
+
             return _mapper.Map<GetListResponse<GetListProductListItemDto>>(products);
 
         }

@@ -7,5 +7,6 @@ namespace Application.Features.Users.Commands.Update
         public string LastName { get; set; }
         public string Email { get; set; }
         public bool Status { get; set; }
+        public List<Guid> OperationClaimIds { get; set; }
     }
 }

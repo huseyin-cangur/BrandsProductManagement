@@ -11,6 +11,7 @@ namespace Application.Features.Users.Commands.Create
         public string LastName { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
+        public List<Guid> OperationClaimIds { get; set; }
         public string CacheKey => "";
         public bool BypassCache => false;
         public string? CacheGroupKey => "GetUsers";

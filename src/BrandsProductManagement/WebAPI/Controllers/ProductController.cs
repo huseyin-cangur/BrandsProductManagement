@@ -33,16 +33,14 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] PageRequest? pageRequest)
+        public async Task<IActionResult> GetAll([FromQuery] PageRequest pageRequest)
         {
 
-            var query = new GetListProductQuery
-            {
-                PageRequest = pageRequest?.IsValid == true ? pageRequest : null
-            };
+            var query = new GetListProductQuery { PageRequest = pageRequest };
+
 
             GetListResponse<GetListProductListItemDto> getListResponse = await mediator.Send(query);
-            
+
             return Ok(getListResponse);
         }
         [HttpGet]

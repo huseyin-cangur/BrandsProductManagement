@@ -2,6 +2,7 @@ using Application;
 using Core.CrossCuttingConcerns.Exceptions.Extensions;
 using Core.Security;
 using Persistence;
+using Persistence.Contexts;
 using WebAPI.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,6 +30,12 @@ builder.Services.AddDistributedMemoryCache();
 builder.Services.AddControllers();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<BaseDbContext>();
+    db.Database.EnsureCreated();
+}
 
 
 if (app.Environment.IsDevelopment())

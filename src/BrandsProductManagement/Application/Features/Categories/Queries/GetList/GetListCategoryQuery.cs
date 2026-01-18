@@ -10,7 +10,10 @@ namespace Application.Features.Categories.Queries.GetList
     public class GetListCategoryQuery : IRequest<GetListResponse<GetListCategoryListItemDto>>, ICachableRequest
     {
         public PageRequest? PageRequest { get; set; }
-        public string CacheKey => $"GetListCategoryQuery({PageRequest.PageIndex},{PageRequest.PageSize})";
+        public string CacheKey =>
+          PageRequest is null
+         ? "GetListCategoryQueryAll"
+         : $"GetListCategoryQuery({PageRequest.PageIndex},{PageRequest.PageSize})";
         public bool BypassCache { get; }
         public TimeSpan? SlidingExpiration { get; }
 

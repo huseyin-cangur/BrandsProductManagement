@@ -6,6 +6,7 @@ namespace Application.Features.Users.Commands.Create
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
+        public List<Guid>? OperationClaimIds { get; set; }
         public bool Status { get; set; }
     }
 }

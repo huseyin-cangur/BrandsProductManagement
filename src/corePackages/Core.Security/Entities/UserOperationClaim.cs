@@ -10,16 +10,5 @@ public class UserOperationClaim:Entity<Guid>
     public virtual User User { get; set; }
     public virtual OperationClaim OperationClaim { get; set; }
 
-    public UserOperationClaim(Guid userId, Guid operationClaimId)
-    {
-        UserId = userId;
-        OperationClaimId = operationClaimId;
-    }
-
-    public UserOperationClaim(Guid id, Guid userId, Guid operationClaimId)
-        : base(id)
-    {
-        UserId = userId;
-        OperationClaimId = operationClaimId;
-    }
+  
 }

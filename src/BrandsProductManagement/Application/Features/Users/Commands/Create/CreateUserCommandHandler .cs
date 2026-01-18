@@ -1,4 +1,4 @@
- 
+
 using Application.Features.Users.Rules;
 using Application.Services.Repositories;
 using AutoMapper;
@@ -11,14 +11,16 @@ namespace Application.Features.Users.Commands.Create
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, CreatedUserResponse>
     {
         private readonly IUserRepository _userRepository;
+        private readonly IUserOperationClaimRepository _userOperationClaimRepository;
         private readonly IMapper _mapper;
         private readonly UserBusinessRules _userBusinessRules;
 
-        public CreateUserCommandHandler(IUserRepository userRepository, IMapper mapper, UserBusinessRules userBusinessRules)
+        public CreateUserCommandHandler(IUserRepository userRepository, IMapper mapper, UserBusinessRules userBusinessRules, IUserOperationClaimRepository userOperationClaimRepository)
         {
             _userRepository = userRepository;
             _mapper = mapper;
             _userBusinessRules = userBusinessRules;
+            _userOperationClaimRepository = userOperationClaimRepository;
         }
 
 
@@ -36,7 +38,25 @@ namespace Application.Features.Users.Commands.Create
             user.PasswordSalt = passwordSalt;
             User createdUser = await _userRepository.AddAsync(user);
 
+
+            if (request.OperationClaimIds is not null && request.OperationClaimIds.Any())
+            {
+                List<UserOperationClaim> userOperationClaims =
+                    request.OperationClaimIds.Select(operationId => new UserOperationClaim
+                    {
+                        UserId = createdUser.Id,
+                        OperationClaimId=operationId
+                    }
+                      
+                   ).ToList();
+
+                await _userOperationClaimRepository.AddRangeAsync(userOperationClaims);
+            }
+
+
+
             CreatedUserResponse response = _mapper.Map<CreatedUserResponse>(createdUser);
+            response.OperationClaimIds = request.OperationClaimIds;
             return response;
         }
     }

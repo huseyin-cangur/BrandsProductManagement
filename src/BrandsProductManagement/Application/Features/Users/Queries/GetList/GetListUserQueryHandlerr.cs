@@ -6,6 +6,7 @@ using Core.Application.Response;
 using Core.Persistence.Paging;
 using Core.Security.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Features.Users.Queries.GetList
 {
@@ -23,24 +24,12 @@ namespace Application.Features.Users.Queries.GetList
         public async Task<GetListResponse<GetListUserListItemDto>> Handle(GetListUserQuery request, CancellationToken cancellationToken)
         {
 
-            Paginate<User> users;
-
-
-            if (request.PageRequest?.PageIndex.HasValue == true &&
-                request.PageRequest.PageSize.HasValue)
-            {
-                users = await _userRepository.GetListAsync(
+            Paginate<User> users = await _userRepository.GetListAsync(
+                    include:u=>u.Include(u=>u.UserOperationClaims).ThenInclude(o=>o.OperationClaim),
                     index: request.PageRequest.PageIndex.Value,
                     size: request.PageRequest.PageSize.Value,
-                    cancellationToken: cancellationToken
-                );
-            }
-            else
-            {
-                users = await _userRepository.GetListAsync(
-                    cancellationToken: cancellationToken
-                );
-            }
+                    cancellationToken: cancellationToken);
+
 
             return _mapper.Map<GetListResponse<GetListUserListItemDto>>(users);
         }

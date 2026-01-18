@@ -23,7 +23,16 @@ namespace Application.Features.Users.Profiles
             CreateMap<DeleteUserResponse, User>().ReverseMap();
 
 
-            CreateMap<User, GetListUserListItemDto>().ReverseMap();
+            CreateMap<User, GetListUserListItemDto>()
+             .ForMember(
+                dest => dest.OperationClaimIds,
+                opt => opt.MapFrom(src =>
+                    src.UserOperationClaims
+                        .Select(x => x.OperationClaimId)
+                        .ToList()
+                )
+            )
+            .ReverseMap();
 
             CreateMap<Paginate<User>, GetListResponse<GetListUserListItemDto>>().ReverseMap();
         }
