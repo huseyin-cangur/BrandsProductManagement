@@ -10,6 +10,7 @@ namespace Application.Features.Categories.Commands.Update
     public class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategoryCommand, UpdateCategoryResponse>
     {
         private readonly ICategoryRepository _categoryRepository;
+        private readonly IMapper _mapper;
 
         public UpdateCategoryCommandHandler(ICategoryRepository categoryRepository, IMapper mapper)
         {
@@ -17,7 +18,7 @@ namespace Application.Features.Categories.Commands.Update
             _mapper = mapper;
         }
 
-        private readonly IMapper _mapper;
+
         public async Task<UpdateCategoryResponse> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
         {
             Category? category = await _categoryRepository.GetAsync(
