@@ -7,13 +7,14 @@ using Application.Features.Products.Queries.GetById;
 using Application.Features.Products.Queries.GetList;
 using Core.Application.Request;
 using Core.Application.Response;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
 {
     public class ProductController : BaseController
     {
-
+        [Authorize(Roles = "Product_User,Admin")]
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] CreateProductCommand createProductCommand)
         {
@@ -33,6 +34,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Product_User,Admin")]
         public async Task<IActionResult> GetAll([FromQuery] PageRequest pageRequest)
         {
 
@@ -44,6 +46,7 @@ namespace WebAPI.Controllers
             return Ok(getListResponse);
         }
         [HttpGet]
+        [Authorize(Roles = "Product_User,Admin")]
         public async Task<IActionResult> GetById([FromQuery] Guid id)
         {
             GetByIdProductQuery getByIdProductQuery = new() { Id = id };
@@ -53,18 +56,19 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "Product_User,Admin")]
         public async Task<IActionResult> Update([FromBody] UpdateProductCommand updateProductCommand)
         {
             UpdateProductResponse response = await mediator.Send(updateProductCommand);
 
             return Ok(
-ApiResponse<UpdateProductResponse>.SuccessResponse(
-    response,
-    "Ürün başarıyla güncellendi"
-)
-);
+            ApiResponse<UpdateProductResponse>.SuccessResponse(
+                response,
+                "Ürün başarıyla güncellendi"
+            )
+            );
         }
-
+        [Authorize(Roles = "Product_User,Admin")]
         [HttpDelete]
         public async Task<IActionResult> Delete([FromQuery] Guid Id)
 

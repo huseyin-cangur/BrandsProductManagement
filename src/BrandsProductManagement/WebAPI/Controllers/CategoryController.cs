@@ -7,6 +7,7 @@ using Application.Features.Categories.Queries.GetById;
 using Application.Features.Categories.Queries.GetList;
 using Core.Application.Request;
 using Core.Application.Response;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -14,6 +15,7 @@ namespace WebAPI.Controllers
 {
     public class CategoryController : BaseController
     {
+        [Authorize(Roles = "Category_User,Admin")]
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] CreateCategoryCommand createCategoryCommand)
         {
@@ -34,9 +36,10 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Category_User,Admin")]
         public async Task<IActionResult> GetAll([FromQuery] PageRequest? pageRequest)
         {
-        
+
             var query = new GetListCategoryQuery
             {
                 PageRequest = pageRequest?.IsValid == true ? pageRequest : null
@@ -47,6 +50,7 @@ namespace WebAPI.Controllers
             return Ok(getListResponse);
         }
         [HttpGet]
+        [Authorize(Roles = "Category_User,Admin")]
         public async Task<IActionResult> GetById([FromQuery] Guid id)
         {
             GetByIdCategoryQuery getByIdCategoryQuery = new() { Id = id };
@@ -56,6 +60,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "Category_User,Admin")]
         public async Task<IActionResult> Update([FromBody] UpdateCategoryCommand updateCategoryCommand)
         {
             UpdateCategoryResponse response = await mediator.Send(updateCategoryCommand);
@@ -69,6 +74,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = "Category_User,Admin")]
         public async Task<IActionResult> Delete([FromQuery] Guid Id)
 
         {

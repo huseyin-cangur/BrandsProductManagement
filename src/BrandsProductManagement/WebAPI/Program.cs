@@ -1,6 +1,10 @@
+using System.Security.Claims;
+using System.Text;
 using Application;
 using Core.CrossCuttingConcerns.Exceptions.Extensions;
 using Core.Security;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Persistence;
 using Persistence.Contexts;
 using WebAPI.Extensions;
@@ -28,6 +32,24 @@ builder.Services.AddSwaggerConfig();
 builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddControllers();
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["TokenOptions:Issuer"],
+            ValidAudience = builder.Configuration["TokenOptions:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["TokenOptions:SecurityKey"])
+            ),
+            RoleClaimType = ClaimTypes.Role
+        };
+    });
 
 var app = builder.Build();
 

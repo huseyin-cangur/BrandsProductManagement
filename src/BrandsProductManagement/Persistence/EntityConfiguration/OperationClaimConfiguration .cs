@@ -40,19 +40,19 @@ public class OperationClaimConfiguration : IEntityTypeConfiguration<OperationCla
         new OperationClaim
         {
             Id = Guid.Parse("2081e9a9-0d1f-4535-a5e5-28f9d71da9d0"),
-            Name = "Category.User",
+            Name = "Category_User",
             CreatedDate = createdDate
         },
         new OperationClaim
         {
             Id = Guid.Parse("9b893c6b-7abf-4649-a93f-271ce8515910"),
-            Name = "Product.User",
+            Name = "Product_User",
             CreatedDate = createdDate
         },
         new OperationClaim
         {
             Id = Guid.Parse("e1e1554e-851b-4e08-8d27-0d1dbf2dc6fc"),
-            Name = "Standard.User",
+            Name = "Standard_User",
             CreatedDate = createdDate
         }
     };
